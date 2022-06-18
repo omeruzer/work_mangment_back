@@ -11,4 +11,8 @@ class Material extends Model
 
     protected $table ='materials';
     protected $guarded = [];
+
+    public function getProducts(){
+        return $this->hasMany('App\Models\Product','material_id');
+    }
 }

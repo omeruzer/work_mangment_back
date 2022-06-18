@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Customer;
+use App\Models\Note;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CustomerSeeder extends Seeder
+class NoteSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,13 +17,11 @@ class CustomerSeeder extends Seeder
     {
         $faker = \Faker\Factory::create(); 
 
-        for ($i=0; $i < 10; $i++) { 
-            Customer::create([
+        for ($i=0; $i < 3; $i++) { 
+            Note::create([
                 'user_id' => 1,
-                'name' => $faker->name(),
-                'email' => $faker->email(),
-                'phone' => $faker->phoneNumber(),
-                'address' => $faker->address(),
+                'title' => $faker->sentence(1),
+                'content' => $faker->sentence(5)
             ]);
         }
     }

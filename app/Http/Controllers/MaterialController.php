@@ -16,7 +16,7 @@ class MaterialController extends Controller
         $this->user = User::where('id',1)->first();
     }
     public function index(){
-        $material = Material::where('user_id',$this->user->id)->get();
+        $material = Material::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($material);
 

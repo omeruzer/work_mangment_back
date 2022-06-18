@@ -11,4 +11,8 @@ class Personel extends Model
 
     protected $table ='personels';
     protected $guarded = [];
+
+    public function getDepartman(){
+        return $this->hasOne('App\Models\Departman','id','departman_id');
+    }
 }

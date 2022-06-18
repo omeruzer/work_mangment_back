@@ -15,12 +15,14 @@ class CategoryController extends Controller
     {
         $this->user = User::where('id',1)->first();
     }
+    
     public function index(){
-        $category = Category::orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $category = Category::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($category);
 
     }
+
     public function add(){
         $category = Category::create([
             'user_id' => $this->user->id,

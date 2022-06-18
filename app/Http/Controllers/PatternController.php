@@ -16,7 +16,7 @@ class PatternController extends Controller
         $this->user = User::where('id',1)->first();
     }
     public function index(){
-        $pattern = Pattern::where('user_id',$this->user->id)->get();
+        $pattern = Pattern::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($pattern);
 

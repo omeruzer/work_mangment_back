@@ -16,7 +16,7 @@ class DepartmanController extends Controller
         $this->user = User::where('id',1)->first();
     }
     public function index(){
-        $departman = Departman::where('user_id',$this->user->id)->get();
+        $departman = Departman::orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($departman);
 

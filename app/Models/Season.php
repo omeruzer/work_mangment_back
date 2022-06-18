@@ -11,4 +11,8 @@ class Season extends Model
 
     protected $table ='seasons';
     protected $guarded = [];
+
+    public function getProducts(){
+        return $this->hasMany('App\Models\Product','season_id');
+    }
 }
