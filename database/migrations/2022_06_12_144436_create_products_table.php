@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('img')->nullable()->default(null);
             $table->string('name');
             $table->decimal('price',20,2);
+            $table->decimal('cors',20,2);
             $table->string('code');
             $table->integer('qty');
             $table->string('sizes');

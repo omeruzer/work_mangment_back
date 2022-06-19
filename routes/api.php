@@ -102,4 +102,8 @@ Route::group(['prefix'=>'customer'],function(){
     Route::post('edit/{id}',[CustomerController::class,'edit']);
     Route::post('remove/{id}',[CustomerController::class,'remove']);});
 
+
+Route::post('upload',function(Request $request){
+    dd($request->all());
+});
     

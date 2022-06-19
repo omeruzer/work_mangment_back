@@ -23,11 +23,13 @@ class ProductController extends Controller
     }
 
     public function add(){
+
         $product = Product::create([
             'user_id' => $this->user->id,
             'img' => request('img'),
             'name' => request('name'),
             'price' => request('price'),
+            'cors' => request('cors'),
             'code' => request('code'),
             'qty' => request('qty'),
             'sizes' => request('sizes'),
@@ -44,7 +46,7 @@ class ProductController extends Controller
     }
 
     public function detail($id){
-        $product = Product::where('id',$id)->first();
+        $product = Product::with('getBrand','getMaterial','getPattern','getCategory','getSeason')->where('id',$id)->first();
 
         return response()->json($product);
     }
@@ -55,6 +57,7 @@ class ProductController extends Controller
             'price' => request('price'),
             'code' => request('code'),
             'qty' => request('qty'),
+            'cors' => request('cors'),
             'packQty' => request('packQty'),
             'content' => request('content'),
             'category_id' => request('category_id'),
