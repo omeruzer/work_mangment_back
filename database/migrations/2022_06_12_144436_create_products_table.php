@@ -22,9 +22,9 @@ return new class extends Migration
             $table->decimal('cors',20,2);
             $table->string('code');
             $table->integer('qty');
-            $table->string('sizes');
+            // $table->string('sizes');
             $table->longText('content')->nullable()->default(null);
-            $table->integer('packQty');
+            // $table->integer('packQty');
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('pattern_id')->unsigned();
             $table->bigInteger('material_id')->unsigned();

@@ -13,6 +13,6 @@ class Material extends Model
     protected $guarded = [];
 
     public function getProducts(){
-        return $this->hasMany('App\Models\Product','material_id');
+        return $this->hasMany('App\Models\Product','material_id')->select(['material_id','name']);
     }
 }

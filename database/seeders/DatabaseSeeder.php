@@ -28,5 +28,10 @@ class DatabaseSeeder extends Seeder
         $this->call(NoteSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(CustomerSeeder::class);
+        $this->call(ProductVaritantSeeder::class);
+        $this->call(ProductVaritantValueSeeder::class);
+        $this->call(ProductVariantStockSeeder::class);
+        $this->call(InvoiceSeeder::class);
+        $this->call(InvoiceProductsSeeder::class);
     }
 }

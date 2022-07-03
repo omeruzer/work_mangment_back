@@ -13,6 +13,9 @@ class Pattern extends Model
     protected $guarded = [];
 
     public function getProducts(){
-        return $this->hasMany('App\Models\Product','pattern_id');
+        
+        $products =$this->hasMany('App\Models\Product','pattern_id')->select(['pattern_id','name']);
+        
+        return $products;
     }
 }

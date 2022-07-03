@@ -30,4 +30,9 @@ class Product extends Model
     public function getSeason(){
         return $this->hasOne('App\Models\Season','id','season_id');
     }
+
+    public function getProductVariant()
+    {
+        return $this->hasMany('App\Models\ProductVariant','product_id');
+    }
 }

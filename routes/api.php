@@ -4,11 +4,15 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DepartmanController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PatternController;
 use App\Http\Controllers\PersonelController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\ProductVariantStockController;
+use App\Http\Controllers\ProductVariantValueController;
 use App\Http\Controllers\SeasonController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,10 +104,38 @@ Route::group(['prefix'=>'customer'],function(){
     Route::post('add',[CustomerController::class,'add']);
     Route::post('detail/{id}',[CustomerController::class,'detail']);
     Route::post('edit/{id}',[CustomerController::class,'edit']);
-    Route::post('remove/{id}',[CustomerController::class,'remove']);});
-
-
-Route::post('upload',function(Request $request){
-    dd($request->all());
+    Route::post('remove/{id}',[CustomerController::class,'remove']);
 });
+
+// Invoice
+Route::group(['prefix'=>'invoice'],function(){
+    Route::post('/',[InvoiceController::class,'index']);
+    Route::post('add',[InvoiceController::class,'add']);
+    Route::post('detail/{id}',[InvoiceController::class,'detail']);
+    Route::post('edit/{id}',[InvoiceController::class,'edit']);
+    Route::post('remove/{id}',[InvoiceController::class,'remove']);
+});
+
+    Route::group(['prefix'=>'variant'],function(){
+    Route::post('/',[ProductVariantController::class,'index']);
+    Route::post('add',[ProductVariantController::class,'add']);
+    Route::post('detail/{id}',[ProductVariantController::class,'detail']);
+    Route::post('edit/{id}',[ProductVariantController::class,'edit']);
+    Route::post('remove/{id}',[ProductVariantController::class,'remove']);});
+
+    Route::group(['prefix'=>'variantvalue'],function(){
+    Route::post('/',[ProductVariantValueController::class,'index']);
+    Route::post('add',[ProductVariantValueController::class,'add']);
+    Route::post('detail/{id}',[ProductVariantValueController::class,'detail']);
+    Route::post('edit/{id}',[ProductVariantValueController::class,'edit']);
+    Route::post('remove/{id}',[ProductVariantValueController::class,'remove']);});
+
+Route::group(['prefix'=>'variantstock'],function(){
+    Route::post('/',[ProductVariantStockController::class,'index']);
+    Route::post('add',[ProductVariantStockController::class,'add']);
+    Route::post('detail/{id}',[ProductVariantStockController::class,'detail']);
+    Route::post('edit/{id}',[ProductVariantStockController::class,'edit']);
+    Route::post('remove/{id}',[ProductVariantStockController::class,'remove']);});
+
+
     
