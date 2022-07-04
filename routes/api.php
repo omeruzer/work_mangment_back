@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DepartmanController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoiceProductsController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PatternController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductVariantStockController;
 use App\Http\Controllers\ProductVariantValueController;
 use App\Http\Controllers\SeasonController;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -107,6 +109,23 @@ Route::group(['prefix'=>'customer'],function(){
     Route::post('remove/{id}',[CustomerController::class,'remove']);
 });
 
+// Invoice
+Route::group(['prefix'=>'invoice'],function(){
+    Route::post('/',[InvoiceController::class,'index']);
+    Route::post('add',[InvoiceController::class,'add']);
+    Route::post('detail/{id}',[InvoiceController::class,'detail']);
+    Route::post('edit/{id}',[InvoiceController::class,'edit']);
+    Route::post('remove/{id}',[InvoiceController::class,'remove']);
+});
+
+// Invoice Product
+Route::group(['prefix'=>'invoice-product'],function(){
+    Route::post('/',[InvoiceProductsController::class,'index']);
+    Route::post('add',[InvoiceProductsController::class,'add']);
+    Route::post('detail/{id}',[InvoiceProductsController::class,'detail']);
+    Route::post('edit/{id}',[InvoiceProductsController::class,'edit']);
+    Route::post('remove/{id}',[InvoiceProductsController::class,'remove']);
+});
 // Invoice
 Route::group(['prefix'=>'invoice'],function(){
     Route::post('/',[InvoiceController::class,'index']);

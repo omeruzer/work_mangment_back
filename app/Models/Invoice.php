@@ -14,7 +14,8 @@ class Invoice extends Model
     protected $guarded = [];
 
     protected $appends=[
-        'amount'
+        'amount',
+        'productQty'
     ];
 
     public function getCustomer(){
@@ -26,9 +27,22 @@ class Invoice extends Model
     }
 
     public function getAmountAttribute(){
-        $amount = $this->getDetail->sum('price');
+        $amount =0;
+        
+        foreach ($this->getDetail as $value) {
+            $amount=$amount+($value->price*$value->qty);
+        }
 
         return $amount;
+    }
+    public function getproductQtyAttribute(){
+        $qty =0;
+        
+        foreach ($this->getDetail as $value) {
+            $qty=$qty+($value->qty);
+        }
+
+        return $qty;
     }
 
 }

@@ -26,6 +26,8 @@ class InvoiceController extends Controller
     public function add(){
         $invoice = Invoice::create([
             'user_id' => $this->user->id,
+            'invoice_no'=>'SP-00'.rand(1000,99999),
+            'type'=>request('type'),
             'customer_id' => request('customer_id') 
         ]);
 
@@ -38,7 +40,8 @@ class InvoiceController extends Controller
     }
     public function edit($id){
         $invoice = Invoice::where('id',$id)->update([
-            'customer_id' => request('customer_id') 
+            'customer_id' => request('customer_id') ,
+            'type'=>request('type'),
         ]);
 
         return response()->json($invoice);
