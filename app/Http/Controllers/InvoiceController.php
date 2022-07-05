@@ -17,7 +17,7 @@ class InvoiceController extends Controller
     }
     
     public function index(){
-        $invoice = Invoice::with('getCustomer','getDetail')->orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $invoice = Invoice::with('getCustomer','getDetail.getProduct')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($invoice);
 
@@ -26,7 +26,7 @@ class InvoiceController extends Controller
     public function add(){
         $invoice = Invoice::create([
             'user_id' => $this->user->id,
-            'invoice_no'=>'SP-00'.rand(1000,99999),
+            'invoice_no'=>'F-00'.rand(1000,99999),
             'type'=>request('type'),
             'customer_id' => request('customer_id') 
         ]);
@@ -34,7 +34,7 @@ class InvoiceController extends Controller
         return response()->json($invoice);
     }
     public function detail($id){
-        $invoice = Invoice::where('id',$id)->first();
+        $invoice = Invoice::with("getDetail.getProduct")->where('id',$id)->first();
 
         return response()->json($invoice);
     }
