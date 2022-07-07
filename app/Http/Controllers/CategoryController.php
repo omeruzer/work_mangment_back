@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\User;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -17,6 +18,7 @@ class CategoryController extends Controller
     }
     
     public function index(){
+        Limit::perMinute(3);
         $category = Category::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($category);

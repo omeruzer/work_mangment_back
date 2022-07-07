@@ -12,6 +12,49 @@ class Product extends Model
     protected $table ='products';
     protected $guarded = [];
 
+    protected $appends=[
+        'sellCount',
+        'totalSellPrice',
+        'totalSellProfit'
+    ];
+
+    public function getsellCountAttribute(){
+        $sellCount=0;
+        $invoice =Invoice::with('getDetail')->where('type',1)->get();
+
+        foreach ($invoice as  $value) {
+            foreach ($value->getDetail->where('product_id',$this->id)  as $item) {
+                $sellCount=$sellCount+($item->qty);
+            }    
+        }
+         
+        return $sellCount;
+    }
+
+    public function gettotalSellPriceAttribute(){
+        $sellPrice=0;
+        $invoice =Invoice::with('getDetail')->where('type',1)->get();
+
+        foreach ($invoice as  $value) {
+            foreach ($value->getDetail->where('product_id',$this->id)  as $item) {
+                $sellPrice=$sellPrice+($item->price*$item->qty);
+            }    
+        }
+         
+        return $sellPrice;
+    }
+
+    public function gettotalSellProfitAttribute(){
+        
+        $cors=$this->cors;
+        $totalPrice = $this->gettotalSellPriceAttribute();
+        $sellCount = $this->getsellCountAttribute();
+        
+        $total=$totalPrice-($cors*$sellCount);
+
+        return $total;
+    }
+
     public function getBrand(){
         return $this->hasOne('App\Models\Brand','id','brand_id');
     }
@@ -31,8 +74,7 @@ class Product extends Model
         return $this->hasOne('App\Models\Season','id','season_id');
     }
 
-    public function getProductVariant()
-    {
+    public function getProductVariant(){
         return $this->hasMany('App\Models\ProductVariant','product_id');
     }
 }

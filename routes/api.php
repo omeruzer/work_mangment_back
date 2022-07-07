@@ -15,6 +15,7 @@ use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductVariantStockController;
 use App\Http\Controllers\ProductVariantValueController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\StatisticController;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +59,7 @@ Route::group(['prefix'=>'personel'],function(){
     Route::post('remove/{id}',[PersonelController::class,'remove']);
 });
 
-// Material 
+// Material
 Route::group(['prefix'=>'material'],function(){
     Route::post('/',[MaterialController::class,'index']);
     Route::post('add',[MaterialController::class,'add']);
@@ -67,7 +68,7 @@ Route::group(['prefix'=>'material'],function(){
     Route::post('remove/{id}',[MaterialController::class,'remove']);
 });
 
-// Pattern 
+// Pattern
 Route::group(['prefix'=>'pattern'],function(){
     Route::post('/',[PatternController::class,'index']);
     Route::post('add',[PatternController::class,'add']);
@@ -76,7 +77,7 @@ Route::group(['prefix'=>'pattern'],function(){
     Route::post('remove/{id}',[PatternController::class,'remove']);
 });
 
-// Season 
+// Season
 Route::group(['prefix'=>'season'],function(){
     Route::post('/',[SeasonController::class,'index']);
     Route::post('add',[SeasonController::class,'add']);
@@ -85,7 +86,7 @@ Route::group(['prefix'=>'season'],function(){
     Route::post('remove/{id}',[SeasonController::class,'remove']);
 });
 
-// Product 
+// Product
 Route::group(['prefix'=>'product'],function(){
     Route::post('/',[ProductController::class,'index']);
     Route::post('add',[ProductController::class,'add']);
@@ -93,14 +94,14 @@ Route::group(['prefix'=>'product'],function(){
     Route::post('edit/{id}',[ProductController::class,'edit']);
     Route::post('remove/{id}',[ProductController::class,'remove']);
 });
-// Note 
+// Note
 Route::group(['prefix'=>'note'],function(){
     Route::post('/',[NoteController::class,'index']);
     Route::post('add',[NoteController::class,'add']);
     Route::post('remove/{id}',[NoteController::class,'remove']);
 });
 
-// Customer 
+// Customer
 Route::group(['prefix'=>'customer'],function(){
     Route::post('/',[CustomerController::class,'index']);
     Route::post('add',[CustomerController::class,'add']);
@@ -135,6 +136,13 @@ Route::group(['prefix'=>'invoice'],function(){
     Route::post('remove/{id}',[InvoiceController::class,'remove']);
 });
 
+// statistic
+Route::group(['prefix'=>'statistic'],function(){
+    Route::post('/item-count',[StatisticController::class,'itemCounts']);
+    Route::post('/declining-product-stock',[StatisticController::class,'decliningProductStock']);
+    Route::post('/top-customer',[StatisticController::class,'topCustomer']);
+});
+
     Route::group(['prefix'=>'variant'],function(){
     Route::post('/',[ProductVariantController::class,'index']);
     Route::post('add',[ProductVariantController::class,'add']);
@@ -157,4 +165,3 @@ Route::group(['prefix'=>'variantstock'],function(){
     Route::post('remove/{id}',[ProductVariantStockController::class,'remove']);});
 
 
-    

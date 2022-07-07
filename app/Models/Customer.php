@@ -11,4 +11,8 @@ class Customer extends Model
 
     protected $table ='customers';
     protected $guarded = [];
+
+    public function getOrders(){
+        return $this->hasMany('App\Models\Invoice','customer_id');
+    }
 }

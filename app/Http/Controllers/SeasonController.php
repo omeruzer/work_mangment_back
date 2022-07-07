@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Season;
 use App\Models\User;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 
 class SeasonController extends Controller
@@ -16,6 +17,7 @@ class SeasonController extends Controller
         $this->user = User::where('id',1)->first();
     }
     public function index(){
+        Limit::perMinute(3);
         $season = Season::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($season);

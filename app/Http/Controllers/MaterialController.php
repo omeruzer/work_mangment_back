@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Material;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Cache\RateLimiting\Limit;
 
 class MaterialController extends Controller
 {
@@ -16,6 +17,7 @@ class MaterialController extends Controller
         $this->user = User::where('id',1)->first();
     }
     public function index(){
+        Limit::perMinute(3);
         $material = Material::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($material);

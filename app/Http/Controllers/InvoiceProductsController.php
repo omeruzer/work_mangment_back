@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\InvoiceProducts;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 
 class InvoiceProductsController extends Controller
 {
     public function index(){
+        Limit::perMinute(3);
         $invoiceProducts = InvoiceProducts::orderByDesc('id')->get();
 
         return response()->json($invoiceProducts);

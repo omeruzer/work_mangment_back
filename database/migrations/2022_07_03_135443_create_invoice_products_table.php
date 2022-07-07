@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('invoice_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
-            
+
             $table->integer('qty');
-            $table->integer('price');
+            $table->decimal('price',20,2);
             $table->timestamps();
 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\User;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -16,6 +17,7 @@ class BrandController extends Controller
         $this->user = User::where('id',1)->first();
     }
     public function index(){
+        Limit::perMinute(3);
         $brands = Brand::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($brands);

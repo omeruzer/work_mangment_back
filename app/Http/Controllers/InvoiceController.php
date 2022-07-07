@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\User;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -17,6 +18,7 @@ class InvoiceController extends Controller
     }
     
     public function index(){
+        Limit::perMinute(3);
         $invoice = Invoice::with('getCustomer','getDetail.getProduct')->orderByDesc('id')->where('user_id',$this->user->id)->get();
 
         return response()->json($invoice);
@@ -33,6 +35,7 @@ class InvoiceController extends Controller
 
         return response()->json($invoice);
     }
+    
     public function detail($id){
         $invoice = Invoice::with("getDetail.getProduct")->where('id',$id)->first();
 
