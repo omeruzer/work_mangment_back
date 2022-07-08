@@ -16,7 +16,7 @@ class InvoiceController extends Controller
     {
         $this->user = User::where('id',1)->first();
     }
-    
+
     public function index(){
         Limit::perMinute(3);
         $invoice = Invoice::with('getCustomer','getDetail.getProduct')->orderByDesc('id')->where('user_id',$this->user->id)->get();
@@ -30,12 +30,12 @@ class InvoiceController extends Controller
             'user_id' => $this->user->id,
             'invoice_no'=>'F-00'.rand(1000,99999),
             'type'=>request('type'),
-            'customer_id' => request('customer_id') 
+            'customer_id' => request('customer_id')
         ]);
 
         return response()->json($invoice);
     }
-    
+
     public function detail($id){
         $invoice = Invoice::with("getDetail.getProduct")->where('id',$id)->first();
 

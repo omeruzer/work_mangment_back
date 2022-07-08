@@ -141,6 +141,9 @@ Route::group(['prefix'=>'statistic'],function(){
     Route::post('/item-count',[StatisticController::class,'itemCounts']);
     Route::post('/declining-product-stock',[StatisticController::class,'decliningProductStock']);
     Route::post('/top-customer',[StatisticController::class,'topCustomer']);
+    Route::post('/daily-sell',[StatisticController::class,'dailySell']);
+    Route::post('/mounthly-sell',[StatisticController::class,'mounthlySell']);
+    Route::post('/last-invoices',[StatisticController::class,'lastInvoices']);
 });
 
     Route::group(['prefix'=>'variant'],function(){
