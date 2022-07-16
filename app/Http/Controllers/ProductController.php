@@ -16,11 +16,63 @@ class ProductController extends Controller
         $this->user = User::where('id',1)->first();
     }
 
-    public function index(){
+    public function index(Request $request){
         Limit::perMinute(3);
-        $product = Product::with('getBrand','getMaterial','getPattern','getCategory','getSeason','getProductVariant.getProductVariantValue.getProductVariantStock')->orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $product = Product::with('getBrand','getMaterial','getPattern','getCategory','getSeason')->orderByDesc('id')->where('user_id',$this->user->id);
+        if($request->has('brand')){
+            $product->where('brand_id',$request->brand);
+        }
 
-        return response()->json($product);
+        if($request->has('category')){
+            $product->where('category_id',$request->category);
+        }
+
+        if($request->has('season')){
+            $product->where('season_id',$request->season);
+        }
+
+        if($request->has('pattern')){
+            $product->where('pattern_id',$request->pattern);
+        }
+
+        if($request->has('material')){
+            $product->where('material_id',$request->material);
+        }
+
+        if($request->has('code')){
+            $product->where('code','LIKE', '%' . $request->code . '%');
+        }
+
+        if($request->has('name')){
+            $product->where('name','LIKE', '%' . $request->name  . '%');
+        }
+
+
+        if($request->has('price')){
+            if($request->price=='1'){
+                $product->where('price','>=',1)->where('price','<=',50);
+            }else if($request->price=='2'){
+                $product->where('price','>=',50)->where('price','<=',100);
+            }else if($request->price=='3'){
+                $product->where('price','>=',100)->where('price','<=',200);
+            }else if($request->price=='4'){
+                $product->where('price','>=',200)->where('price','<=',500);
+            }else if($request->price=='5'){
+                $product->where('price','>=',500)->where('price','<=',1000);
+            }else if($request->price=='6'){
+                $product->whphere('price','>=',1000);
+            }
+        }
+
+        if($request->has('img')){
+            if($request->img=='1'){
+                $product->where('img','!=',null);
+            }else if($request->img=='2'){
+                $product->where('img','=',null);
+            }
+        }
+
+        return response()->json($product->get());
 
     }
 
