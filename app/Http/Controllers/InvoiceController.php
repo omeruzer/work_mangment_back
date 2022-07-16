@@ -48,6 +48,10 @@ class InvoiceController extends Controller
             }
         }
 
+        if($request->has('code')){
+            $invoice->where('invoice_no','LIKE', '%' . $request->code . '%');
+        }
+
 
         return response()->json($invoice->get());
 

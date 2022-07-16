@@ -24,14 +24,21 @@ class StatisticController extends Controller
         $data=[];
 
         $productCount = Product::where('user_id',$this->user->id)->count();
-        $todayTotalSell = Invoice::where('user_id',$this->user->id)->whereDate('created_at',Carbon::now())->get();
+        $todayTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->whereDate('created_at',Carbon::now())->get();
+        $todayTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->whereDate('created_at',Carbon::now())->get();
         $weekTotalSell = Invoice::where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(7))->get();
-        $mounthTotalSell = Invoice::where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(30))->get();
+        $mounthTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(30))->get();
+        $mounthTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(30))->get();
         $threeMounthTotalSell = Invoice::where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(90))->get();
 
         $todayTotalSellPrice=0;
         foreach ($todayTotalSell as $value) {
             $todayTotalSellPrice=$todayTotalSellPrice+$value->amount;
+        }
+
+        $todayTotalReturnPrice=0;
+        foreach ($todayTotalReturn as $value) {
+            $todayTotalReturnPrice=$todayTotalReturnPrice+$value->amount;
         }
         $weekTotalSellPrice=0;
         foreach ($weekTotalSell as $value) {
@@ -41,6 +48,10 @@ class StatisticController extends Controller
         foreach ($mounthTotalSell as $value) {
             $mounthTotalSellPrice=$mounthTotalSellPrice+$value->amount;
         }
+        $mounthTotalReturnPrice=0;
+        foreach ($mounthTotalReturn as $value) {
+            $mounthTotalReturnPrice=$mounthTotalReturnPrice+$value->amount;
+        }
         $threeMounthTotalSellPrice=0;
         foreach ($threeMounthTotalSell as $value) {
             $threeMounthTotalSellPrice=$threeMounthTotalSellPrice+$value->amount;
@@ -48,8 +59,10 @@ class StatisticController extends Controller
 
         $data['product_count']=$productCount;
         $data['today_total_sell']=$todayTotalSellPrice;
+        $data['today_total_return']=$todayTotalReturnPrice;
         $data['last_seven_day_total_sell']=$weekTotalSellPrice;
         $data['last_mount_total_sell']=$mounthTotalSellPrice;
+        $data['last_mount_total_return']=$mounthTotalReturnPrice;
         $data['last_three_mounth_total_sell']=$threeMounthTotalSellPrice;
 
         return response()->json($data);

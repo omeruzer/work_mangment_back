@@ -28,16 +28,18 @@ class Invoice extends Model
 
     public function getAmountAttribute(){
         $amount =0;
-        
+
         foreach ($this->getDetail as $value) {
             $amount=$amount+($value->price*$value->qty);
         }
+
+        Invoice::where('id',$this->id)->update(['amount_db'=>$amount]);
 
         return $amount;
     }
     public function getproductQtyAttribute(){
         $qty =0;
-        
+
         foreach ($this->getDetail as $value) {
             $qty=$qty+($value->qty);
         }
