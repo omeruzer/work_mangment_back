@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
@@ -21,9 +22,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::post('login',[AuthController::class,'login']);
 
+Route::group(['middleware'=>'auth:sanctum'],function(){
+    // USER
+    Route::get('user',[AuthController::class,'userInfo']);
 
-// BRANDS
+    // BRANDS
 Route::group(['prefix'=>'brand'],function(){
     Route::post('/',[BrandController::class,'index']);
     Route::post('add',[BrandController::class,'add']);
@@ -167,4 +172,4 @@ Route::group(['prefix'=>'variantstock'],function(){
     Route::post('edit/{id}',[ProductVariantStockController::class,'edit']);
     Route::post('remove/{id}',[ProductVariantStockController::class,'remove']);});
 
-
+});
