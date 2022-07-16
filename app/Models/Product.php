@@ -15,7 +15,9 @@ class Product extends Model
     protected $appends=[
         'sellCount',
         'totalSellPrice',
-        'totalSellProfit'
+        'totalSellProfit',
+        'returnCount',
+        'endCount',
     ];
 
     public function getsellCountAttribute(){
@@ -25,10 +27,32 @@ class Product extends Model
         foreach ($invoice as  $value) {
             foreach ($value->getDetail->where('product_id',$this->id)  as $item) {
                 $sellCount=$sellCount+($item->qty);
-            }    
+            }
         }
-         
+
         return $sellCount;
+    }
+    public function getreturnCountAttribute(){
+        $returnCount=0;
+        $invoice =Invoice::with('getDetail')->where('type',0)->get();
+
+        foreach ($invoice as  $value) {
+            foreach ($value->getDetail->where('product_id',$this->id)  as $item) {
+                $returnCount=$returnCount+($item->qty);
+            }
+        }
+
+        return $returnCount;
+    }
+
+    public function getendCountAttribute(){
+        $data=$this->qty-$this->getsellCountAttribute()+$this->getreturnCountAttribute();
+
+        Product::where('id',$this->id)->update([
+            'end_qty'=>$data
+        ]);
+
+        return $data;
     }
 
     public function gettotalSellPriceAttribute(){
@@ -38,18 +62,18 @@ class Product extends Model
         foreach ($invoice as  $value) {
             foreach ($value->getDetail->where('product_id',$this->id)  as $item) {
                 $sellPrice=$sellPrice+($item->price*$item->qty);
-            }    
+            }
         }
-         
+
         return $sellPrice;
     }
 
     public function gettotalSellProfitAttribute(){
-        
+
         $cors=$this->cors;
         $totalPrice = $this->gettotalSellPriceAttribute();
         $sellCount = $this->getsellCountAttribute();
-        
+
         $total=$totalPrice-($cors*$sellCount);
 
         return $total;

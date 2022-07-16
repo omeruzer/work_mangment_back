@@ -15,7 +15,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create(); 
+        $faker = \Faker\Factory::create();
 
         $productImages = [
             'https://st.myideasoft.com/idea/di/34/myassets/products/572/tsk-tisort-2020.jpg?revision=1593324979',
@@ -30,7 +30,7 @@ class ProductSeeder extends Seeder
 
         ];
 
-        for ($i=0; $i < 30; $i++) { 
+        for ($i=0; $i < 30; $i++) {
             $randomImg  = array_rand($productImages,1);
             $price = $faker->randomFloat(3,1,500);
             Product::create([
@@ -41,6 +41,7 @@ class ProductSeeder extends Seeder
                 'price' =>$price+50,
                 'cors' => $price,
                 "qty"=> rand(500,5000),
+                "end_qty"=> rand(500,5000),
                 // "packQty"=> 1,
                 // 'sizes'=>'S-M-L-XL-XXL',
                 'content'=>$faker->sentence(6),
@@ -48,7 +49,7 @@ class ProductSeeder extends Seeder
                 'pattern_id' => rand(1,3),
                 'material_id' => rand(1,3),
                 'brand_id' => rand(1,3),
-                'season_id' => rand(1,3),                
+                'season_id' => rand(1,3),
             ]);
         }
     }

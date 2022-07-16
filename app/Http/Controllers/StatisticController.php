@@ -24,12 +24,12 @@ class StatisticController extends Controller
         $data=[];
 
         $productCount = Product::where('user_id',$this->user->id)->count();
-        $todayTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->whereDate('created_at',Carbon::now())->get();
-        $todayTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->whereDate('created_at',Carbon::now())->get();
-        $weekTotalSell = Invoice::where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(7))->get();
-        $mounthTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(30))->get();
-        $mounthTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(30))->get();
-        $threeMounthTotalSell = Invoice::where('user_id',$this->user->id)->where('created_at','<=',Carbon::now())->where('created_at','>=',Carbon::now()->subDay(90))->get();
+        $todayTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->whereDate('invoice_date',Carbon::now())->get();
+        $todayTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->whereDate('invoice_date',Carbon::now())->get();
+        $weekTotalSell = Invoice::where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(7))->get();
+        $mounthTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(30))->get();
+        $mounthTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(30))->get();
+        $threeMounthTotalSell = Invoice::where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(90))->get();
 
         $todayTotalSellPrice=0;
         foreach ($todayTotalSell as $value) {
@@ -70,7 +70,7 @@ class StatisticController extends Controller
 
     public function decliningProductStock(){
 
-        $products = Product::where('qty','<',20)->where('user_id',$this->user->id)->orderBy("qty",'ASC')->select('name','qty','code')->get();
+        $products = Product::where('end_qty','<',20)->where('user_id',$this->user->id)->orderBy("end_qty",'ASC')->select('name','end_qty','code')->get();
 
         return response()->json($products);
     }
@@ -119,7 +119,7 @@ class StatisticController extends Controller
 
         foreach ($date as $key=>$value) {
 
-            $sell = Invoice::where('user_id',$this->user->id)->whereDate('created_at','=',Carbon::today()->subDay($day)->addDay($key))->where('type',$type)->count();
+            $sell = Invoice::where('user_id',$this->user->id)->whereDate('invoice_date','=',Carbon::today()->subDay($day)->addDay($key))->where('type',$type)->count();
             $data[]=$sell;
         }
 
@@ -160,7 +160,7 @@ class StatisticController extends Controller
         $date = $this->getMounthlyDate($mounth)->original;
 
         foreach ($date as $key=>$value) {
-            $sell = Invoice::where('user_id',$this->user->id)->whereDate('created_at','<=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('last day of this month'))->whereDate('created_at','>=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('first day of this month'))->where('type',$type)->count();
+            $sell = Invoice::where('user_id',$this->user->id)->whereDate('invoice_date','<=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('last day of this month'))->whereDate('invoice_date','>=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('first day of this month'))->where('type',$type)->count();
             $data[]=$sell;
         }
 

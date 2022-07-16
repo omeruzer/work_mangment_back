@@ -22,16 +22,19 @@ return new class extends Migration
             $table->decimal('cors',20,2);
             $table->string('code');
             $table->integer('qty');
+            $table->integer('end_qty')->nullable();
+
             // $table->string('sizes');
-            $table->longText('content')->nullable()->default(null);
             // $table->integer('packQty');
+
+            $table->longText('content')->nullable()->default(null);
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('pattern_id')->unsigned();
             $table->bigInteger('material_id')->unsigned();
             $table->bigInteger('brand_id')->unsigned();
             $table->bigInteger('season_id')->unsigned();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');

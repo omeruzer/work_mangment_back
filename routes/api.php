@@ -27,6 +27,8 @@ Route::post('login',[AuthController::class,'login']);
 Route::group(['middleware'=>'auth:sanctum'],function(){
     // USER
     Route::get('user',[AuthController::class,'userInfo']);
+    Route::post('user-update',[AuthController::class,'userUpdate']);
+    Route::post('user-update-pass',[AuthController::class,'userPass']);
 
     // BRANDS
 Route::group(['prefix'=>'brand'],function(){

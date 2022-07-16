@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 
@@ -52,6 +53,20 @@ class InvoiceController extends Controller
             $invoice->where('invoice_no','LIKE', '%' . $request->code . '%');
         }
 
+        if($request->has('date')){
+            if($request->date=='1'){
+                $invoice->whereDate('invoice_date','=',Carbon::now()->addDay(1));
+            }else if($request->date=='2'){
+                $invoice->whereDate('invoice_date','=',Carbon::now());
+            }else if($request->date=='3'){
+                $invoice->whereDate('invoice_date','<=',Carbon::now()->addDay(1))->whereDate('invoice_date','>=',Carbon::now()->addDay(1)->subDay(7));
+            }else if($request->date=='4'){
+                $invoice->whereDate('invoice_date','<=',Carbon::now()->addDay(1))->whereDate('invoice_date','>=',Carbon::now()->addDay(1)->subDay(14));
+            }else if($request->date=='5'){
+               $invoice->whereDate('invoice_date','<=',Carbon::now()->addDay(1))->whereDate('invoice_date','>=',Carbon::now()->addDay(1)->subDay(30));
+            }
+        }
+
 
         return response()->json($invoice->get());
 
@@ -62,7 +77,8 @@ class InvoiceController extends Controller
             'user_id' => $this->user->id,
             'invoice_no'=>'F-00'.rand(1000,99999),
             'type'=>request('type'),
-            'customer_id' => request('customer_id')
+            'customer_id' => request('customer_id'),
+            'invoice_date'=>request('invoice_date')
         ]);
 
         return response()->json($invoice);
@@ -77,6 +93,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('id',$id)->update([
             'customer_id' => request('customer_id') ,
             'type'=>request('type'),
+            'invoice_date'=>request('invoice_date')
         ]);
 
         return response()->json($invoice);
