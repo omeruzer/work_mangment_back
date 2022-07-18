@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
 {
@@ -14,11 +15,11 @@ class BrandController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
     public function index(){
         Limit::perMinute(3);
-        $brands = Brand::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $brands = Brand::with('getProducts')->orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($brands);
 
@@ -31,8 +32,8 @@ class BrandController extends Controller
 
     public function add(){
         $brand = Brand::create([
-            'user_id' => $this->user->id,
-            'name' => request('name') 
+            'user_id' => auth()->id(),
+            'name' => request('name')
         ]);
 
         return response()->json($brand);

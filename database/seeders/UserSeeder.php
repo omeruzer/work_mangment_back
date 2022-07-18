@@ -19,8 +19,11 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Ömer Uzer',
             'email'=> 'omeruzer@gmail.com',
+            'isActive'=> 1,
             'password' => Hash::make('asd'),
             'shop_name' => 'Ömerin Mağazası',
+            'shop_address' => 'Zeytinburnu İstanbul',
+            'phone'=> 05645646645
         ]);
     }
 }

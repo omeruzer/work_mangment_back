@@ -6,6 +6,7 @@ use App\Models\Season;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SeasonController extends Controller
 {
@@ -14,11 +15,11 @@ class SeasonController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
     public function index(){
         Limit::perMinute(3);
-        $season = Season::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $season = Season::with('getProducts')->orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($season);
 
@@ -26,8 +27,8 @@ class SeasonController extends Controller
 
     public function add(){
         $season = Season::create([
-            'user_id' => $this->user->id,
-            'name' => request('name') 
+            'user_id' => auth()->id(),
+            'name' => request('name')
         ]);
 
         return response()->json($season);

@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -15,12 +16,12 @@ class InvoiceController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
 
     public function index(Request $request){
         Limit::perMinute(3);
-        $invoice = Invoice::with('getCustomer','getDetail.getProduct')->orderByDesc('id')->where('user_id',$this->user->id);
+        $invoice = Invoice::with('getCustomer','getDetail.getProduct')->orderByDesc('id')->where('user_id',auth()->id());
 
         if($request->has('type')){
             if($request->type=='1'){
@@ -74,7 +75,7 @@ class InvoiceController extends Controller
 
     public function add(){
         $invoice = Invoice::create([
-            'user_id' => $this->user->id,
+            'user_id' => auth()->id(),
             'invoice_no'=>'F-00'.rand(1000,99999),
             'type'=>request('type'),
             'customer_id' => request('customer_id'),

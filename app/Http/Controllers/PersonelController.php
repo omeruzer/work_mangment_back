@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Personel;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PersonelController extends Controller
 {
@@ -13,10 +14,10 @@ class PersonelController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
     public function index(){
-        $personel = Personel::with('getDepartman')->orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $personel = Personel::with('getDepartman')->orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($personel);
 
@@ -24,7 +25,7 @@ class PersonelController extends Controller
 
     public function add(){
         $personel = Personel::create([
-            'user_id' => $this->user->id,
+            'user_id' => auth()->id(),
             'name' => request('name') ,
             'departman_id' => request('departman_id') ,
             'salary' => request('salary') ,

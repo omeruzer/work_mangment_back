@@ -23,10 +23,12 @@ class AuthController extends Controller
 
     public function userUpdate(Request $request){
 
-        User::where('id',Auth::id())->update([
+        User::where('id',Auth::id()) ->update([
             'name' => $request->name,
             'shop_name'=>$request->shop_name,
-            'email'=>$request->email
+            'email'=>$request->email,
+            'phone'=>$request->phone,
+            'shop_address'=>$request->shop_address,
         ]);
 
         return response()->json(['message'=>'Updated']);
@@ -41,7 +43,7 @@ class AuthController extends Controller
         if(Hash::check($pass, $userPass)){
 
             $this->user->update([
-                'password'=>Hash::make($request->new_pass)  
+                'password'=>Hash::make($request->new_pass)
             ]);
 
             return response()->json(['msg'=>'Updated']);
@@ -53,14 +55,30 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $email = $request->email;
-        $password = $request->password;
-        if(Auth::attempt(['email' => $email, 'password' => $password])){
-            $token = $this->user->createToken('myapp')->plainTextToken;
+        $data = [
+            'email'=>  $request->email,
+            'password'=> $request->password,
+            'isActive'=>1
+        ];
+        if(Auth::attempt($data)){
+            $token = auth()->user()->createToken('myapp')->plainTextToken;
 
-            return response()->json(['user'=>$this->user,'token'=>$token]);
+            return response()->json(['message'=>'Success','user'=>$request->email,'token'=>$token]);
         }else{
             return response()->json(['message'=>'Login Fail']);
         }
+    }
+
+    public function register(Request $request){
+        $user = User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'phone'=>$request->phone,
+            'shop_name'=>$request->shop_name,
+            'shop_address'=>$request->shop_address,
+            'password'=>Hash::make($request->password),
+        ]);
+
+        return response()->json(['message'=>'Success','user'=>$user]);
     }
 }

@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('shop_name');
+            $table->string('phone');
+            $table->string('shop_address');
+            $table->boolean('isActive')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

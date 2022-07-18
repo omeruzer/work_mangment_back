@@ -6,6 +6,7 @@ use App\Models\Material;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Auth;
 
 class MaterialController extends Controller
 {
@@ -14,19 +15,19 @@ class MaterialController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
     public function index(){
         Limit::perMinute(3);
-        $material = Material::with('getProducts')->orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $material = Material::with('getProducts')->orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($material);
 
     }
     public function add(){
         $material = Material::create([
-            'user_id' => $this->user->id,
-            'name' => request('name') 
+            'user_id' => auth()->id(),
+            'name' => request('name')
         ]);
 
         return response()->json($material);

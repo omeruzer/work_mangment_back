@@ -6,6 +6,7 @@ use App\Models\Pattern;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Auth;
 
 class PatternController extends Controller
 {
@@ -14,11 +15,11 @@ class PatternController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
     public function index(){
         Limit::perMinute(3);
-        $pattern = Pattern::with(["getProducts"])->orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $pattern = Pattern::with(["getProducts"])->orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($pattern);
 
@@ -26,8 +27,8 @@ class PatternController extends Controller
 
     public function add(){
         $pattern = Pattern::create([
-            'user_id' => $this->user->id,
-            'name' => request('name') 
+            'user_id' => auth()->id(),
+            'name' => request('name')
         ]);
 
         return response()->json($pattern);

@@ -10,26 +10,34 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Google\Service\HangoutsChat\Card;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StatisticController extends Controller
 {
     protected $user;
+    protected $activeId;
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->middleware(function ($request, $next) {
+            $this->user= Auth::user();
+
+            return $next($request);
+        });
+
+        $this->user = User::where('id',2) ->first();
     }
 
     public function itemCounts(){
         $data=[];
 
-        $productCount = Product::where('user_id',$this->user->id)->count();
-        $todayTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->whereDate('invoice_date',Carbon::now())->get();
-        $todayTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->whereDate('invoice_date',Carbon::now())->get();
-        $weekTotalSell = Invoice::where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(7))->get();
-        $mounthTotalSell = Invoice::where('type',1)->where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(30))->get();
-        $mounthTotalReturn = Invoice::where('type',0)->where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(30))->get();
-        $threeMounthTotalSell = Invoice::where('user_id',$this->user->id)->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(90))->get();
+        $productCount = Product::where('user_id',auth()->id())->count();
+        $todayTotalSell = Invoice::where('type',1)->where('user_id',auth()->id())->whereDate('invoice_date',Carbon::now())->get();
+        $todayTotalReturn = Invoice::where('type',0)->where('user_id',auth()->id())->whereDate('invoice_date',Carbon::now())->get();
+        $weekTotalSell = Invoice::where('user_id',auth()->id())->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(7))->get();
+        $mounthTotalSell = Invoice::where('type',1)->where('user_id',auth()->id())->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(30))->get();
+        $mounthTotalReturn = Invoice::where('type',0)->where('user_id',auth()->id())->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(30))->get();
+        $threeMounthTotalSell = Invoice::where('user_id',auth()->id())->where('invoice_date','<=',Carbon::now())->where('invoice_date','>=',Carbon::now()->subDay(90))->get();
 
         $todayTotalSellPrice=0;
         foreach ($todayTotalSell as $value) {
@@ -70,14 +78,14 @@ class StatisticController extends Controller
 
     public function decliningProductStock(){
 
-        $products = Product::where('end_qty','<',20)->where('user_id',$this->user->id)->orderBy("end_qty",'ASC')->select('name','end_qty','code')->get();
+        $products = Product::where('end_qty','<',20)->where('user_id',auth()->id())->orderBy("end_qty",'ASC')->select('name','end_qty','code')->get();
 
         return response()->json($products);
     }
 
     public function topCustomer(){
         $data=[];
-        $customer = Customer::where('user_id',$this->user->id)->select('id','name')->limit(9)->get();
+        $customer = Customer::where('user_id',auth()->id())->select('id','name')->limit(9)->get();
 
         $data['customers']= $customer;
 
@@ -119,7 +127,7 @@ class StatisticController extends Controller
 
         foreach ($date as $key=>$value) {
 
-            $sell = Invoice::where('user_id',$this->user->id)->whereDate('invoice_date','=',Carbon::today()->subDay($day)->addDay($key))->where('type',$type)->count();
+            $sell = Invoice::where('user_id',auth()->id())->whereDate('invoice_date','=',Carbon::today()->subDay($day)->addDay($key))->where('type',$type)->count();
             $data[]=$sell;
         }
 
@@ -160,7 +168,7 @@ class StatisticController extends Controller
         $date = $this->getMounthlyDate($mounth)->original;
 
         foreach ($date as $key=>$value) {
-            $sell = Invoice::where('user_id',$this->user->id)->whereDate('invoice_date','<=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('last day of this month'))->whereDate('invoice_date','>=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('first day of this month'))->where('type',$type)->count();
+            $sell = Invoice::where('user_id',auth()->id())->whereDate('invoice_date','<=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('last day of this month'))->whereDate('invoice_date','>=',Carbon::now()->subMonth($mounth)->addMonth($key)->modify('first day of this month'))->where('type',$type)->count();
             $data[]=$sell;
         }
 
@@ -169,7 +177,7 @@ class StatisticController extends Controller
     }
 
     public function lastInvoices(){
-        $invoices = Invoice::with('getCustomer')->where('user_id',$this->user->id)->orderByDesc('id')->limit(10)->get();
+        $invoices = Invoice::with('getCustomer')->where('user_id',auth()->id())->orderByDesc('id')->limit(10)->get();
 
         return response()->json($invoices);
     }

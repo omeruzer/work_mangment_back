@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -13,11 +14,11 @@ class CustomerController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
 
     public function index(){
-        $customer = Customer::orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $customer = Customer::orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($customer);
 
@@ -25,7 +26,7 @@ class CustomerController extends Controller
 
     public function add(){
         $customer = Customer::create([
-            'user_id' => $this->user->id,
+            'user_id' => auth()->id(),
             'name' => request('name'),
             'email' => request('email'),
             'phone' => request('phone'),

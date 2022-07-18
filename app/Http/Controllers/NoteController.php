@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
@@ -13,17 +14,17 @@ class NoteController extends Controller
 
     public function __construct()
     {
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
     public function index(){
-        $note = Note::orderByDesc('id')->where('user_id',$this->user->id)->get();
+        $note = Note::orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($note);
 
     }
     public function add(){
         $note = Note::create([
-            'user_id' => $this->user->id,
+            'user_id' => auth()->id(),
             'title' => request('title'),
             'content' => request('content'),
         ]);

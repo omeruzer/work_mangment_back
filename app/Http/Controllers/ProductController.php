@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -13,12 +14,12 @@ class ProductController extends Controller
     protected $user;
 
     public function __construct(){
-        $this->user = User::where('id',1)->first();
+        $this->user = User::where('id',1) ->first();
     }
 
     public function index(Request $request){
         Limit::perMinute(3);
-        $product = Product::with('getBrand','getMaterial','getPattern','getCategory','getSeason')->orderByDesc('id')->where('user_id',$this->user->id);
+        $product = Product::with('getBrand','getMaterial','getPattern','getCategory','getSeason')->orderByDesc('id')->where('user_id',auth()->id());
         if($request->has('brand')){
             $product->where('brand_id',$request->brand);
         }
@@ -79,7 +80,7 @@ class ProductController extends Controller
     public function add(){
 
         $product = Product::create([
-            'user_id' => $this->user->id,
+            'user_id' => auth()->id(),
             'img' => request('img'),
             'name' => request('name'),
             'price' => request('price'),
