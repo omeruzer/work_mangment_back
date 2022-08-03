@@ -16,7 +16,7 @@ class InvoiceSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=0; $i < 10; $i++) {
+        for ($i=0; $i < 50; $i++) {
             Invoice::create([
                 'user_id' => 1,
                 'type'=>rand(0,1),

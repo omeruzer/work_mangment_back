@@ -69,7 +69,7 @@ class InvoiceController extends Controller
         }
 
 
-        return response()->json($invoice->get());
+        return response()->json($invoice->paginate(15));
 
     }
 

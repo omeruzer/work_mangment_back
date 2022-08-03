@@ -73,7 +73,7 @@ class ProductController extends Controller
             }
         }
 
-        return response()->json($product->get());
+        return response()->json($product->paginate(10));
 
     }
 
