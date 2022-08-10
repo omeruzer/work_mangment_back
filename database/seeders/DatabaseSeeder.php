@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductVariantStockSeeder::class);
         $this->call(InvoiceSeeder::class);
         $this->call(InvoiceProductsSeeder::class);
+        $this->call(CurrentSeeder::class);
     }
 }

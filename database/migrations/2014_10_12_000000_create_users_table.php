@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('shop_name');
             $table->string('phone');
             $table->string('shop_address');
-            $table->boolean('isActive')->default(0);
+            $table->boolean('isActive')->default(1);
+            $table->string('money')->default('$');
             $table->rememberToken();
             $table->timestamps();
         });

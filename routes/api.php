@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CurrentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DepartmanController;
 use App\Http\Controllers\InvoiceController;
@@ -15,8 +16,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductVariantStockController;
 use App\Http\Controllers\ProductVariantValueController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\StatisticController;
+use App\Models\Current;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,6 +121,17 @@ Route::group(['prefix'=>'customer'],function(){
     Route::post('remove/{id}',[CustomerController::class,'remove']);
 });
 
+// Customer
+Route::group(['prefix'=>'current'],function(){
+    Route::post('/',[CurrentController::class,'index']);
+    Route::post('add',[CurrentController::class,'add']);
+    Route::post('detail/{id}',[CurrentController::class,'detail']);
+    Route::post('edit/{id}',[CurrentController::class,'edit']);
+    Route::post('remove/{id}',[CurrentController::class,'remove']);
+    Route::post('current-count',[CurrentController::class,'currentCount']);
+
+});
+
 // Invoice
 Route::group(['prefix'=>'invoice'],function(){
     Route::post('/',[InvoiceController::class,'index']);
@@ -152,7 +166,15 @@ Route::group(['prefix'=>'statistic'],function(){
     Route::post('/daily-sell',[StatisticController::class,'dailySell']);
     Route::post('/mounthly-sell',[StatisticController::class,'mounthlySell']);
     Route::post('/last-invoices',[StatisticController::class,'lastInvoices']);
+    Route::post('/reports-sell-return',[StatisticController::class,'getReportsSellReturn']);
 });
+
+// reports
+Route::group(['prefix'=>'reports'],function(){
+    Route::post('/reports-sell-return',[ReportsController::class,'getReportsSellReturn']);
+});
+
+
 
     Route::group(['prefix'=>'variant'],function(){
     Route::post('/',[ProductVariantController::class,'index']);

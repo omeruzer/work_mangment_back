@@ -29,6 +29,7 @@ class AuthController extends Controller
             'email'=>$request->email,
             'phone'=>$request->phone,
             'shop_address'=>$request->shop_address,
+            'money'=>$request->money,
         ]);
 
         return response()->json(['message'=>'Updated']);

@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Invoice;
-use Carbon\Carbon;
+use App\Models\Current;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class InvoiceSeeder extends Seeder
+class CurrentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,14 +16,15 @@ class InvoiceSeeder extends Seeder
     public function run()
     {
         for ($i=0; $i < 50; $i++) {
+            $faker = \Faker\Factory::create();
             $int= mt_rand(1644506342,1660155681);
-
-            Invoice::create([
+            Current::create([
                 'user_id' => 1,
                 'type'=>rand(0,1),
-                'invoice_no'=>'F-00'.$i+1,
-                'customer_id' => rand(1,10),
-                'invoice_date'=>date("Y-m-d H:i:s",$int)
+                'title'=>$faker->sentence(1),
+                'desc'=>$faker->sentence(5),
+                'price'=>rand(150,5000),
+                'current_date'=>date("Y-m-d H:i:s",$int)
             ]);
         }
     }

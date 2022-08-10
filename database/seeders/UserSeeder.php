@@ -23,7 +23,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('asd'),
             'shop_name' => 'Ömerin Mağazası',
             'shop_address' => 'Zeytinburnu İstanbul',
-            'phone'=> 05645646645
+            'phone'=> 05645646645,
+            'money'=> '₺'
         ]);
     }
 }

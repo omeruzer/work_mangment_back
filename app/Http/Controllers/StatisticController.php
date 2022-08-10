@@ -120,6 +120,8 @@ class StatisticController extends Controller
         return response()->json($data);
     }
 
+
+
     public function getDailyInvoiceCount($type,$day){
         $data=[];
 
