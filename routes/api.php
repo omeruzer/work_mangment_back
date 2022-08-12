@@ -166,12 +166,14 @@ Route::group(['prefix'=>'statistic'],function(){
     Route::post('/daily-sell',[StatisticController::class,'dailySell']);
     Route::post('/mounthly-sell',[StatisticController::class,'mounthlySell']);
     Route::post('/last-invoices',[StatisticController::class,'lastInvoices']);
-    Route::post('/reports-sell-return',[StatisticController::class,'getReportsSellReturn']);
+    Route::post('/reports-sell-return',[StatisticController::class,'dailySell']);
 });
 
 // reports
 Route::group(['prefix'=>'reports'],function(){
-    Route::post('/reports-sell-return',[ReportsController::class,'getReportsSellReturn']);
+    Route::post('/reports-sell-return-daily',[ReportsController::class,'getReportsSellReturnDaily']);
+    Route::post('/reports-sell-return-mounthly',[ReportsController::class,'getReportsSellReturnMounthly']);
+    Route::post('/reports-brand',[ReportsController::class,'brandReport']);
 });
 
 
