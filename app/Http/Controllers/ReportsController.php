@@ -108,10 +108,21 @@ class ReportsController extends Controller
         $data=[];
         $brands = Brand::all();
 
-        foreach ($brands as $key => $value) {
-            $data['brands'][]=$value->name;
-        }
 
+        foreach ($brands as $key => $value) {
+            $sellingBrandCount=0;
+            $data['brands'][]=$value->name;
+            $invoices = Invoice::with('getDetail.getProduct.getBrand')->get();
+
+            // foreach ($invoices as $key1 => $invoice) {
+            //     foreach ($invoice->getDetail as $key2 => $item) {
+            //         dd($item->getProduct->id);
+            //     }
+            // }
+        }
+        dd($sellingBrandCount);
+        $data['sell'][]=1;
+        $data['sell'][]=1;
         $data['sell'][]=1;
 
         return response()->json($data);
