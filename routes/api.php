@@ -174,6 +174,9 @@ Route::group(['prefix'=>'reports'],function(){
     Route::post('/reports-sell-return-daily',[ReportsController::class,'getReportsSellReturnDaily']);
     Route::post('/reports-sell-return-mounthly',[ReportsController::class,'getReportsSellReturnMounthly']);
     Route::post('/reports-brand',[ReportsController::class,'brandReport']);
+    Route::post('/reports-category',[ReportsController::class,'categoryReport']);
+    Route::post('/reports-pattern',[ReportsController::class,'patternReport']);
+    Route::post('/reports-material',[ReportsController::class,'materialReport']);
 });
 
 

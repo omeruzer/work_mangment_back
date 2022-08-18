@@ -156,7 +156,7 @@ class StatisticController extends Controller
 
         $days=[];
         foreach ($period as  $day) {
-            $days[]=$day->format('d/m/Y');
+            $days[]=$day->format('m/Y');
         }
 
         $data=$days;
