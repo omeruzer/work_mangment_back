@@ -117,19 +117,29 @@ class ReportsController extends Controller
             $sellingBrandCount=0;
             $totalSellCount=0;
             $data['brands'][]=$value->name;
-
             $invoices = InvoiceProducts::with(array('getProduct'=>function($q)use($value){
                 $q->where('brand_id',$value->id);
-            }))->get();
+            }))
+            ->with(array('getInvoice'=>function($q){
+                $q->where('type',1);
+            }))
+            ->whereDate('created_at','>=',Carbon::now()->subMonth(6))->whereDate('created_at','<=',Carbon::now())
+            ->get();
 
             foreach ($invoices as $key1 => $invoice) {
                 if($invoice->getProduct!=null){
-                    $sellingBrandCount=$sellingBrandCount+$invoice->qty;
+                    if($invoice->getInvoice!=null){
+                        $sellingBrandCount=$sellingBrandCount+$invoice->qty;
+                    }
                 }
             }
+
             foreach ($invoices as $key1 => $invoice) {
-                $totalSellCount=$totalSellCount+$invoice->qty;
+                if($invoice->getInvoice!=null){
+                    $totalSellCount=$totalSellCount+$invoice->qty;
+                }
             }
+
 
             $data['sell'][]= $sellingBrandCount*100/$totalSellCount;
         }
@@ -148,16 +158,25 @@ class ReportsController extends Controller
 
             $invoices = InvoiceProducts::with(array('getProduct'=>function($q)use($value){
                 $q->where('category_id',$value->id);
-            }))->get();
+            }))
+            ->with(array('getInvoice'=>function($q){
+                $q->where('type',1);
+            }))
+            ->whereDate('created_at','>=',Carbon::now()->subMonth(6))->whereDate('created_at','<=',Carbon::now())
+            ->get();
 
             foreach ($invoices as $key1 => $invoice) {
                 if($invoice->getProduct!=null){
+                    if($invoice->getInvoice!=null){
                     $sellingCategoryCount=$sellingCategoryCount+$invoice->qty;
+                    }
                 }
             }
 
             foreach ($invoices as $key1 => $invoice) {
-                $totalSellCount=$totalSellCount+$invoice->qty;
+                if($invoice->getInvoice!=null){
+                    $totalSellCount=$totalSellCount+$invoice->qty;
+                }
             }
 
             $data['sell'][]= $sellingCategoryCount*100/$totalSellCount;
@@ -178,16 +197,25 @@ class ReportsController extends Controller
 
             $invoices = InvoiceProducts::with(array('getProduct'=>function($q)use($value){
                 $q->where('pattern_id',$value->id);
-            }))->get();
+            }))
+            ->with(array('getInvoice'=>function($q){
+                $q->where('type',1);
+            }))
+            ->whereDate('created_at','>=',Carbon::now()->subMonth(6))->whereDate('created_at','<=',Carbon::now())
+            ->get();
 
             foreach ($invoices as $key1 => $invoice) {
                 if($invoice->getProduct!=null){
-                    $sellingPatternCount=$sellingPatternCount+$invoice->qty;
+                    if($invoice->getInvoice!=null){
+                        $sellingPatternCount=$sellingPatternCount+$invoice->qty;
+                    }
                 }
             }
 
             foreach ($invoices as $key1 => $invoice) {
+                if($invoice->getInvoice!=null){
                 $totalSellCount=$totalSellCount+$invoice->qty;
+                }
             }
 
             $data['sell'][]= $sellingPatternCount*100/$totalSellCount;
@@ -208,15 +236,24 @@ class ReportsController extends Controller
 
             $invoices = InvoiceProducts::with(array('getProduct'=>function($q)use($value){
                 $q->where('material_id',$value->id);
-            }))->get();
+            }))->with(array('getInvoice'=>function($q){
+                $q->where('type',1);
+            }))
+            ->whereDate('created_at','>=',Carbon::now()->subMonth(6))->whereDate('created_at','<=',Carbon::now())
+            ->get();
+
 
             foreach ($invoices as $key1 => $invoice) {
                 if($invoice->getProduct!=null){
-                    $sellingMaterialCount=$sellingMaterialCount+$invoice->qty;
+                    if($invoice->getInvoice!=null){
+                        $sellingMaterialCount=$sellingMaterialCount+$invoice->qty;
+                    }
                 }
             }
             foreach ($invoices as $key1 => $invoice) {
-                $totalSellCount=$totalSellCount+$invoice->qty;
+                if($invoice->getInvoice!=null){
+                    $totalSellCount=$totalSellCount+$invoice->qty;
+                }
             }
 
             $data['sell'][]= $sellingMaterialCount*100/$totalSellCount;

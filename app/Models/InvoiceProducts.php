@@ -15,6 +15,9 @@ class InvoiceProducts extends Model
     public function getProduct(){
         return $this->hasOne('App\Models\Product','id','product_id');
     }
+    public function getInvoice(){
+        return $this->hasOne('App\Models\Invoice','id','invoice_id');
+    }
 
 
 }

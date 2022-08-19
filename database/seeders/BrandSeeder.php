@@ -15,9 +15,9 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create(); 
+        $faker = \Faker\Factory::create();
 
-        for ($i=0; $i < 3; $i++) { 
+        for ($i=0; $i < 3; $i++) {
             Brand::create([
                 'user_id' => 1,
                 'name' => $faker->sentence(1)
