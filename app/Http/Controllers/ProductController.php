@@ -79,21 +79,51 @@ class ProductController extends Controller
 
     public function add(){
 
-        $product = Product::create([
-            'user_id' => auth()->id(),
-            'img' => request('img'),
-            'name' => request('name'),
-            'price' => request('price'),
-            'cors' => request('cors'),
-            'code' => request('code'),
-            'qty' => request('qty'),
-            'content' => request('content'),
-            'category_id' => request('category_id'),
-            'pattern_id' => request('pattern_id'),
-            'material_id' => request('material_id'),
-            'brand_id' => request('brand_id'),
-            'season_id' => request('season_id'),
-        ]);
+        if(request()->hasFile('file')){
+            $this->validate(request(),[
+                'file' => 'image|mimes:jpg,png,jpeg|max:2048',
+            ]);
+            $img = request()->file('file');
+
+            $imgName = rand(0,999).'-'.time(). '.' . $img->extension();
+
+            if($img->isValid()){
+
+                $img->move('assets/images/products/',$imgName);
+
+            }
+
+            $product = Product::create([
+                'user_id' => auth()->id(),
+                'file' => $imgName,
+                'name' => request('name'),
+                'price' => request('price'),
+                'cors' => request('cors'),
+                'code' => request('code'),
+                'qty' => request('qty'),
+                'content' => request('content'),
+                'category_id' => request('category_id'),
+                'pattern_id' => request('pattern_id'),
+                'material_id' => request('material_id'),
+                'brand_id' => request('brand_id'),
+                'season_id' => request('season_id'),
+            ]);
+        }else{
+            $product = Product::create([
+                'user_id' => auth()->id(),
+                'name' => request('name'),
+                'price' => request('price'),
+                'cors' => request('cors'),
+                'code' => request('code'),
+                'qty' => request('qty'),
+                'content' => request('content'),
+                'category_id' => request('category_id'),
+                'pattern_id' => request('pattern_id'),
+                'material_id' => request('material_id'),
+                'brand_id' => request('brand_id'),
+                'season_id' => request('season_id'),
+            ]);
+        }
 
         return response()->json($product);
     }
@@ -105,9 +135,8 @@ class ProductController extends Controller
     }
 
     public function edit($id){
-        $product = Product::where('id',$id)->update([
+        $data = [
             'name' => request('name'),
-            'img' => request('img'),
             'price' => request('price'),
             'code' => request('code'),
             'qty' => request('qty'),
@@ -118,13 +147,48 @@ class ProductController extends Controller
             'material_id' => request('material_id'),
             'brand_id' => request('brand_id'),
             'season_id' => request('season_id'),
-        ]);
+        ];
+
+        if(request()->hasFile('file')){
+            $this->validate(request(),[
+                'file' => 'image|mimes:jpg,png,jpeg|max:2048',
+            ]);
+            $img = request()->file('file');
+
+            $imgName = rand(0,999).'-'.time(). '.' . $img->extension();
+
+            if($img->isValid()){
+
+                $delete = Product::where('id',$id)->firstOrFail();
+                $trash  = $delete->file;
+                if($trash!=null){
+                    $path   = 'assets/images/products/'. $trash;
+
+                    unlink($path);
+                }
+
+                $img->move('assets/images/products/',$imgName);
+
+                $data['file'] = $imgName;
+
+            }
+
+        }
+        $product = Product::where('id',$id)->update($data);
 
         return response()->json($product);
     }
 
     public function remove($id){
-        $product = Product::where('id',$id)->delete();
+
+        $product = Product::find($id);
+        $trash  = $product->file;
+
+        $path   = 'assets/images/products/'.$trash;
+
+        unlink($path);
+
+        $product->delete();
 
         return response()->json($product);
 

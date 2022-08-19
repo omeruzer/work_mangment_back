@@ -35,7 +35,7 @@ class ProductSeeder extends Seeder
             $price = $faker->randomFloat(3,1,500);
             Product::create([
                 'user_id' => 1,
-                'img' => $productImages[$randomImg],
+                'file' => $productImages[$randomImg],
                 'name' => $faker->sentence(2),
                 'code' => rand(2000,99999),
                 'price' =>$price+50,

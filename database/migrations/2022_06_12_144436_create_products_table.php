@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->string('img')->nullable()->default(null);
+            $table->string('file')->nullable()->default(null);
             $table->string('name');
             $table->decimal('price',20,2);
             $table->decimal('cors',20,2);
