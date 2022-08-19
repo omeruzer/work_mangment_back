@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -79,6 +81,13 @@ class AuthController extends Controller
             'shop_address'=>$request->shop_address,
             'password'=>Hash::make($request->password),
         ]);
+
+        $mailData=[
+            'name'=>$request->name,
+            'shop_name'=>$request->shop_name
+        ];
+
+        Mail::to($request->email)->send(new WelcomeMail($mailData));
 
         return response()->json(['message'=>'Success','user'=>$user]);
     }
