@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('shop_name');
+            $table->string('shop_logo')->nullable();
             $table->string('phone');
             $table->string('shop_address');
             $table->boolean('isActive')->default(1);

@@ -33,6 +33,7 @@ Route::group(['middleware'=>'auth:sanctum'],function(){
     Route::get('user',[AuthController::class,'userInfo']);
     Route::post('user-update',[AuthController::class,'userUpdate']);
     Route::post('user-update-pass',[AuthController::class,'userPass']);
+    Route::post('shop-logo',[AuthController::class,'shopLogo']);
 
     // BRANDS
 Route::group(['prefix'=>'brand'],function(){

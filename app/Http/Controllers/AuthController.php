@@ -82,4 +82,34 @@ class AuthController extends Controller
 
         return response()->json(['message'=>'Success','user'=>$user]);
     }
+
+    public function shopLogo(){
+        if(request()->hasFile('shop_logo')){
+
+            $this->validate(request(),[
+                'file' => 'image|mimes:jpg,png,jpeg|max:2048',
+            ]);
+
+            $img = request()->file('shop_logo');
+
+            $imgName = rand(0,999).'-'.time(). '.' . $img->extension();
+
+            if($img->isValid()){
+
+                $delete = User::where('id',auth()->id())->firstOrFail();
+                $trash  = $delete->shop_logo;
+                if($trash!=null){
+                    $path   = 'assets/images/logos/'. $trash;
+
+                    unlink($path);
+                }
+
+                $img->move('assets/images/logos/',$imgName);
+
+                $data['shop_logo'] = $imgName;
+
+            }
+        }
+        $product = User::where('id',auth()->id())->update($data);
+    }
 }
