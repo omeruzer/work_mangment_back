@@ -22,6 +22,10 @@ class Invoice extends Model
         return $this->hasOne('App\Models\Customer','id','customer_id');
     }
 
+    public function getShop(){
+        return $this->hasOne('App\Models\User','id','user_id');
+    }
+
     public function getDetail(){
         return $this->hasMany('App\Models\InvoiceProducts','invoice_id');
     }
