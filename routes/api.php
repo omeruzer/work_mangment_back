@@ -100,6 +100,7 @@ Route::group(['prefix'=>'season'],function(){
 
 // Product
 Route::group(['prefix'=>'product'],function(){
+    Route::post('/all',[ProductController::class,'all']);
     Route::post('/',[ProductController::class,'index']);
     Route::post('add',[ProductController::class,'add']);
     Route::post('detail/{id}',[ProductController::class,'detail']);

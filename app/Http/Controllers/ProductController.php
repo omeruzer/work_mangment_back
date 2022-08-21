@@ -17,6 +17,15 @@ class ProductController extends Controller
         $this->user = User::where('id',1) ->first();
     }
 
+
+
+    public function all(Request $request){
+
+        $product = Product::all();
+
+        return response()->json($product);
+    }
+
     public function index(Request $request){
         Limit::perMinute(3);
         $product = Product::with('getBrand','getMaterial','getPattern','getCategory','getSeason')->orderByDesc('id')->where('user_id',auth()->id());
