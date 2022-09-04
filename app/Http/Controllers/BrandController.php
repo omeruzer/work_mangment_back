@@ -19,7 +19,7 @@ class BrandController extends Controller
     }
     public function index(){
         Limit::perMinute(3);
-        $brands = Brand::with('getProducts')->orderByDesc('id')->where('user_id',auth()->id())->get();
+        $brands = Brand::orderByDesc('id')->where('user_id',auth()->id())->get();
 
         return response()->json($brands);
 

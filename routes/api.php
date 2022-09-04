@@ -27,10 +27,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register',[AuthController::class,'register']);
 Route::post('login',[AuthController::class,'login']);
+Route::post('logout',[AuthController::class,'logout']);
 
 Route::group(['middleware'=>'auth:sanctum'],function(){
     // USER
     Route::get('user',[AuthController::class,'userInfo']);
+    Route::get('logout',[AuthController::class,'logout']);
     Route::post('user-update',[AuthController::class,'userUpdate']);
     Route::post('user-update-pass',[AuthController::class,'userPass']);
     Route::post('shop-logo',[AuthController::class,'shopLogo']);

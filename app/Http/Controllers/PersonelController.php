@@ -28,7 +28,6 @@ class PersonelController extends Controller
             'user_id' => auth()->id(),
             'name' => request('name') ,
             'departman_id' => request('departman_id') ,
-            'salary' => request('salary') ,
         ]);
 
         return response()->json($personel);
@@ -43,7 +42,6 @@ class PersonelController extends Controller
         $personel = Personel::where('id',$id)->update([
             'name' => request('name'),
             'departman_id' => request('departman_id') ,
-            'salary' => request('salary') ,
         ]);
 
         return response()->json($personel);

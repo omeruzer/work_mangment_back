@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Svg\Tag\Rect;
 
 class AuthController extends Controller
 {
@@ -25,7 +26,7 @@ class AuthController extends Controller
 
     public function userUpdate(Request $request){
 
-        User::where('id',Auth::id()) ->update([
+        User::where('id',Auth::id())->update([
             'name' => $request->name,
             'shop_name'=>$request->shop_name,
             'email'=>$request->email,
@@ -33,8 +34,8 @@ class AuthController extends Controller
             'shop_address'=>$request->shop_address,
             'money'=>$request->money,
         ]);
-
-        return response()->json(['message'=>'Updated']);
+        $user = User::where('id',Auth::id())->first();
+        return response()->json($user);
 
     }
 
@@ -72,8 +73,16 @@ class AuthController extends Controller
         }
     }
 
+    public function logout(Request $request){
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+        Auth::logout();
+
+        return response()->json('Logut');
+    }
+
     public function register(Request $request){
-        
+
         $user = User::create([
             'name'=>$request->name,
             'email'=>$request->email,
