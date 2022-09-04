@@ -56,15 +56,15 @@ class InvoiceController extends Controller
 
         if($request->has('date')){
             if($request->date=='1'){
-                $invoice->whereDate('invoice_date','=',Carbon::now()->addDay(1));
-            }else if($request->date=='2'){
                 $invoice->whereDate('invoice_date','=',Carbon::now());
+            }else if($request->date=='2'){
+                $invoice->whereDate('invoice_date','=',Carbon::now()->subDay(1));
             }else if($request->date=='3'){
-                $invoice->whereDate('invoice_date','<=',Carbon::now()->addDay(1))->whereDate('invoice_date','>=',Carbon::now()->addDay(1)->subDay(7));
+                $invoice->whereDate('invoice_date','<=',Carbon::now())->whereDate('invoice_date','>=',Carbon::now()->subDay(7));
             }else if($request->date=='4'){
-                $invoice->whereDate('invoice_date','<=',Carbon::now()->addDay(1))->whereDate('invoice_date','>=',Carbon::now()->addDay(1)->subDay(14));
+                $invoice->whereDate('invoice_date','<=',Carbon::now())->whereDate('invoice_date','>=',Carbon::now()->subDay(14));
             }else if($request->date=='5'){
-               $invoice->whereDate('invoice_date','<=',Carbon::now()->addDay(1))->whereDate('invoice_date','>=',Carbon::now()->addDay(1)->subDay(30));
+               $invoice->whereDate('invoice_date','<=',Carbon::now())->whereDate('invoice_date','>=',Carbon::now()->subDay(30));
             }
         }
 

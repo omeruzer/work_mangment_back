@@ -18,8 +18,29 @@ class Product extends Model
         'totalSellProfit',
         'returnCount',
         'endCount',
+        'internelQty'
     ];
 
+    public function getinternelQtyAttribute(){
+        $endQty=0;
+
+        $internal = Internel::with('getDetail')->get();
+
+        foreach ($internal as $key => $value) {
+            foreach ($value->getDetail->where('product_id',$this->id) as $key => $item) {
+                if($value->type==1){
+                    $endQty=$endQty+($item->qty);
+                }else{
+                    $endQty=$endQty-($item->qty);
+                }
+            }
+        }
+
+        $qty = $endQty;
+
+        return $qty;
+        // return $endQty+$this->qty;
+    }
     public function getsellCountAttribute(){
         $sellCount=0;
         $invoice =Invoice::with('getDetail')->where('type',1)->get();
@@ -46,7 +67,7 @@ class Product extends Model
     }
 
     public function getendCountAttribute(){
-        $data=$this->qty-$this->getsellCountAttribute()+$this->getreturnCountAttribute();
+        $data=$this->qty-$this->getsellCountAttribute()+$this->getreturnCountAttribute()+$this->getinternelQtyAttribute();
 
         Product::where('id',$this->id)->update([
             'end_qty'=>$data

@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DepartmanController;
+use App\Http\Controllers\InternelController;
+use App\Http\Controllers\InternelProductController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceProductsController;
 use App\Http\Controllers\MaterialController;
@@ -152,6 +154,24 @@ Route::group(['prefix'=>'invoice-product'],function(){
     Route::post('detail/{id}',[InvoiceProductsController::class,'detail']);
     Route::post('edit/{id}',[InvoiceProductsController::class,'edit']);
     Route::post('remove/{id}',[InvoiceProductsController::class,'remove']);
+});
+
+// Internel
+Route::group(['prefix'=>'internel'],function(){
+    Route::post('/',[InternelController::class,'index']);
+    Route::post('add',[InternelController::class,'add']);
+    Route::post('detail/{id}',[InternelController::class,'detail']);
+    Route::post('edit/{id}',[InternelController::class,'edit']);
+    Route::post('remove/{id}',[InternelController::class,'remove']);
+});
+
+// Internel Product
+Route::group(['prefix'=>'internel-product'],function(){
+    Route::post('/',[InternelProductController::class,'index']);
+    Route::post('add',[InternelProductController::class,'add']);
+    Route::post('detail/{id}',[InternelProductController::class,'detail']);
+    Route::post('edit/{id}',[InternelProductController::class,'edit']);
+    Route::post('remove/{id}',[InternelProductController::class,'remove']);
 });
 // Invoice
 Route::group(['prefix'=>'invoice'],function(){
