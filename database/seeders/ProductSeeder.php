@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Milon\Barcode\DNS1D;
 
 class ProductSeeder extends Seeder
 {
@@ -31,13 +32,16 @@ class ProductSeeder extends Seeder
         ];
 
         for ($i=0; $i < 30; $i++) {
+            $code=rand(2000,99999);
+            $barcode = (DNS1D::getBarcodeSVG($code, 'C128'));
+
             $randomImg  = array_rand($productImages,1);
             $price = $faker->randomFloat(3,1,500);
             Product::create([
                 'user_id' => 1,
                 'file' => $productImages[$randomImg],
                 'name' => $faker->sentence(2),
-                'code' => rand(2000,99999),
+                'code' => $code,
                 'price' =>$price+50,
                 'cors' => $price,
                 "qty"=> rand(500,5000),
@@ -50,6 +54,7 @@ class ProductSeeder extends Seeder
                 'material_id' => rand(1,3),
                 'brand_id' => rand(1,3),
                 'season_id' => rand(1,3),
+                'barcode'=> base64_encode($barcode)
             ]);
         }
     }

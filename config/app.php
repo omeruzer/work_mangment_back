@@ -197,7 +197,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-
+        Milon\Barcode\BarcodeServiceProvider::class,
     ],
 
     /*
@@ -214,6 +214,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'PDF' => Barryvdh\DomPDF\Facade::class,
                 'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+                'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+                'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

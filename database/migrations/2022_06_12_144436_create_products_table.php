@@ -28,6 +28,7 @@ return new class extends Migration
             // $table->integer('packQty');
 
             $table->longText('content')->nullable()->default(null);
+            $table->longText('barcode');
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('pattern_id')->unsigned();
             $table->bigInteger('material_id')->unsigned();

@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
 
 class ProductController extends Controller
 {
@@ -17,8 +20,6 @@ class ProductController extends Controller
         $this->user = User::where('id',1) ->first();
     }
 
-
-
     public function all(Request $request){
 
         $product = Product::all();
@@ -28,6 +29,7 @@ class ProductController extends Controller
 
     public function index(Request $request){
         Limit::perMinute(3);
+
         $product = Product::with('getBrand','getMaterial','getPattern','getCategory','getSeason')->orderByDesc('id')->where('user_id',auth()->id());
         if($request->has('brand')){
             $product->where('brand_id',$request->brand);
@@ -102,6 +104,8 @@ class ProductController extends Controller
 
             }
 
+            $barcode = (DNS1D::getBarcodeSVG(request('code'), 'C128'));
+
             $product = Product::create([
                 'user_id' => auth()->id(),
                 'file' => $imgName,
@@ -116,8 +120,14 @@ class ProductController extends Controller
                 'material_id' => request('material_id'),
                 'brand_id' => request('brand_id'),
                 'season_id' => request('season_id'),
+                'barcode'=> base64_encode($barcode)
             ]);
+
+
         }else{
+
+            $barcode = (DNS1D::getBarcodeSVG(request('code'), 'C128'));
+
             $product = Product::create([
                 'user_id' => auth()->id(),
                 'name' => request('name'),
@@ -131,6 +141,7 @@ class ProductController extends Controller
                 'material_id' => request('material_id'),
                 'brand_id' => request('brand_id'),
                 'season_id' => request('season_id'),
+                'barcode'=> base64_encode($barcode)
             ]);
         }
 
@@ -201,5 +212,11 @@ class ProductController extends Controller
 
         return response()->json($product);
 
+    }
+
+    public function search(){
+        $products = Product::where('code','LIKE','%'.request('code').'%')->get();
+
+        return response()->json($products);
     }
 }

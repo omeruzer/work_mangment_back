@@ -110,6 +110,7 @@ Route::group(['prefix'=>'product'],function(){
     Route::post('detail/{id}',[ProductController::class,'detail']);
     Route::post('edit/{id}',[ProductController::class,'edit']);
     Route::post('remove/{id}',[ProductController::class,'remove']);
+    Route::post('/search-product',[ProductController::class,'search']);
 });
 // Note
 Route::group(['prefix'=>'note'],function(){
